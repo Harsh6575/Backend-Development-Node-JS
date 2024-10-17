@@ -1,0 +1,19 @@
+# Ignore node modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Ignore log files
+*.log
+
+# Ignore local environment files
+.env
+
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml
+
+# Ignore OS or editor-specific files
+.DS_Store
+*.swp
+*.swo

@@ -62,7 +62,7 @@ app.delete("/teas/:id", (req, res) => {
   }
 
   teaData.splice(teaIndex, 1);
-  res.status(204).send("Deleted");
+  res.status(200).send("Deleted");
 });
 
 app.listen(PORT, () => {
