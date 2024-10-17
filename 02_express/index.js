@@ -1,16 +1,51 @@
 import express from "express";
 import "dotenv/config";
+import morgan from "morgan";
+import logger from "./logger.js";
+
+// create a new instance of express called app
 const app = express();
 
+// Set up logging middleware
+const morganFormat = ":method :url :status :response-time ms";
+
+// set up port number
 const PORT = process.env.PORT ?? 3000;
+
+// use json format to parse response headers
 app.use(express.json());
 
+// create a middleware for morgan
+app.use(
+  morgan(morganFormat, {
+    stream: {
+      write: (message) => {
+        const logObject = {
+          method: message.split(" ")[0],
+          url: message.split(" ")[1],
+          status: message.split(" ")[2],
+          responseTime: message.split(" ")[3],
+        };
+        logger.info(JSON.stringify(logObject));
+      },
+    },
+  })
+);
+
+// empty array to store tea data
 let teaData = [];
+
+// create a id for the tea data
 let nextId = 1;
 
 // Create a new tea
 app.post("/teas", (req, res) => {
   const { name, price } = req.body;
+
+  if (!name || !price) {
+    logger.warn("Missing name or price in the request body");
+    return res.status(400).send("Name and price are required");
+  }
 
   const newTea = {
     id: nextId++,
